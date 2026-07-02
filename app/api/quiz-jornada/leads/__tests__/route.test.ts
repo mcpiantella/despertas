@@ -202,13 +202,33 @@ describe("POST /api/quiz-jornada/leads", () => {
       crm_webhook_error: "CRM webhook failed with status 500"
     });
   });
+
+  it("rate limits repeated submissions from the same ip", async () => {
+    const supabase = createSupabaseMock({
+      insertResult: { data: { id: "lead-1" }, error: null }
+    });
+    createSupabaseServerClientMock.mockReturnValue(supabase);
+
+    const responses = [];
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      responses.push(
+        await POST(requestWith(validPayload, { "x-forwarded-for": "203.0.113.9" }))
+      );
+    }
+
+    expect(responses.slice(0, 5).map((response) => response.status)).toEqual([
+      200, 200, 200, 200, 200
+    ]);
+    expect(responses[5].status).toBe(429);
+    await expect(responses[5].json()).resolves.toMatchObject({ ok: false });
+  });
 });
 
-function requestWith(payload: unknown): Request {
+function requestWith(payload: unknown, headers: Record<string, string> = {}): Request {
   return new Request("http://localhost/api/quiz-jornada/leads", {
     method: "POST",
     body: JSON.stringify(payload),
-    headers: { "content-type": "application/json" }
+    headers: { "content-type": "application/json", ...headers }
   });
 }
 

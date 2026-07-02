@@ -1,8 +1,15 @@
+import { createRateLimiter } from "@/lib/jornada-do-despertar/rate-limit";
 import { scoreJourneyQuiz } from "@/lib/jornada-do-despertar/scoring";
 import { validateJourneyLeadPayload } from "@/lib/jornada-do-despertar/validation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const CRM_WEBHOOK_TIMEOUT_MS = 5000;
+const RATE_LIMIT_PER_MINUTE = 5;
+
+const rateLimiter = createRateLimiter({
+  limit: RATE_LIMIT_PER_MINUTE,
+  windowMs: 60_000
+});
 
 type SupabaseError = {
   code?: string;
@@ -21,6 +28,15 @@ type ExistingLead = {
 };
 
 export async function POST(request: Request): Promise<Response> {
+  const clientIp = resolveClientIp(request);
+
+  if (clientIp && !rateLimiter.check(clientIp)) {
+    return json(
+      { ok: false, error: "Muitas tentativas. Aguarde um instante e tente novamente." },
+      429
+    );
+  }
+
   let body: unknown;
 
   try {
@@ -175,6 +191,12 @@ async function notifyCrmWebhook(
       })
       .eq("id", leadId);
   }
+}
+
+function resolveClientIp(request: Request): string {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+
+  return forwardedFor?.split(",")[0]?.trim() ?? "";
 }
 
 function isDuplicateSubmission(error: SupabaseError): boolean {
