@@ -32,7 +32,7 @@ export function scoreJourneyQuiz(answers: JourneyAnswer[]): ScoringResult {
   const answersByQuestion = new Map(answers.map((item) => [item.questionId, item]));
 
   if (answers.length !== QUIZ_QUESTIONS.length || answersByQuestion.size !== QUIZ_QUESTIONS.length) {
-    throw new Error("Quiz must include exactly one answer for each question.");
+    throw new Error("Responda todas as perguntas para ver sua leitura inicial.");
   }
 
   const scores = { ...EMPTY_SCORES };
@@ -43,7 +43,7 @@ export function scoreJourneyQuiz(answers: JourneyAnswer[]): ScoringResult {
     const option = question.options.find((item) => item.id === selected?.optionId);
 
     if (!option) {
-      throw new Error("Quiz must include exactly one answer for each question.");
+      throw new Error("Responda todas as perguntas para ver sua leitura inicial.");
     }
 
     scoredAreasByQuestion.set(question.id, new Set(Object.keys(option.scores) as JourneyArea[]));

@@ -29,7 +29,7 @@ describe("scoreJourneyQuiz", () => {
   it("rejects missing answers", () => {
     expect(() =>
       scoreJourneyQuiz(answers(["a", "a", "a", "a", "a", "a", "a", "a", "a"]))
-    ).toThrow("exactly one answer for each question");
+    ).toThrow("Responda todas as perguntas para ver sua leitura inicial.");
   });
 
   it("rejects duplicate question answers", () => {
@@ -41,7 +41,7 @@ describe("scoreJourneyQuiz", () => {
           (item, index) => ({ ...item, questionId: `q${index + 2}` })
         )
       ])
-    ).toThrow("exactly one answer for each question");
+    ).toThrow("Responda todas as perguntas para ver sua leitura inicial.");
   });
 
   it("prioritizes IP when tied and IP appears in a key question", () => {
