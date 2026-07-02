@@ -36,4 +36,18 @@ describe("ResultView", () => {
       encodeURIComponent("Clareza e Direcao")
     );
   });
+
+  it("opens WhatsApp links in a new tab without leaking the opener", () => {
+    renderResultView();
+
+    const primaryLink = screen.getByRole("link", {
+      name: "Quero fazer minha Identificação de Travas"
+    });
+    const secondaryLink = screen.getByRole("link", { name: "Tenho uma dúvida antes" });
+
+    for (const link of [primaryLink, secondaryLink]) {
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    }
+  });
 });

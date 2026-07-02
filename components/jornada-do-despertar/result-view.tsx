@@ -64,10 +64,22 @@ export function ResultView({
       </div>
 
       <div className="jd-actions jd-actions--stacked">
-        <a className="jd-button jd-button--primary" href={primaryUrl} onClick={onPrimaryClick}>
+        <a
+          className="jd-button jd-button--primary"
+          href={primaryUrl}
+          onClick={onPrimaryClick}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           Quero fazer minha Identificação de Travas
         </a>
-        <a className="jd-button jd-button--secondary" href={secondaryUrl} onClick={onSecondaryClick}>
+        <a
+          className="jd-button jd-button--secondary"
+          href={secondaryUrl}
+          onClick={onSecondaryClick}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           Tenho uma dúvida antes
         </a>
       </div>
