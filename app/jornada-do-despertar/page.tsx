@@ -1,0 +1,23 @@
+import type { Metadata } from "next";
+import { QuizShell } from "@/components/jornada-do-despertar/quiz-shell";
+
+export const metadata: Metadata = {
+  title: "Jornada do Despertar | Juliana Piantella",
+  description:
+    "Um caminho breve para perceber padrões que talvez estejam influenciando sua clareza, constância e direção.",
+  openGraph: {
+    title: "Jornada do Despertar | Juliana Piantella",
+    description:
+      "Um caminho breve para perceber padrões que talvez estejam influenciando sua clareza, constância e direção.",
+    type: "website"
+  }
+};
+
+export default function JornadaDoDespertarPage() {
+  return (
+    <QuizShell
+      privacyPolicyUrl={process.env.NEXT_PUBLIC_PRIVACY_POLICY_URL ?? ""}
+      whatsappNumber={process.env.NEXT_PUBLIC_JULIANA_WHATSAPP_NUMBER ?? "5500000000000"}
+    />
+  );
+}
