@@ -89,4 +89,31 @@ describe("QuizShell", () => {
 
     expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
   });
+
+  it("captures the landing url at quiz start and persists it with the progress", () => {
+    renderShell();
+
+    const saved = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY) ?? "{}");
+
+    expect(saved.landingUrl).toBe(window.location.href);
+  });
+
+  it("keeps the original landing url when restoring saved progress", () => {
+    seedSavedState({
+      stepIndex: 2,
+      answers: {},
+      submissionId: SAVED_SUBMISSION_ID,
+      landingUrl: "https://juliana.example/jornada-do-despertar?utm_source=instagram",
+      referrer: "https://instagram.com/"
+    });
+
+    renderShell();
+
+    const saved = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY) ?? "{}");
+
+    expect(saved.landingUrl).toBe(
+      "https://juliana.example/jornada-do-despertar?utm_source=instagram"
+    );
+    expect(saved.referrer).toBe("https://instagram.com/");
+  });
 });

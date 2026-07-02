@@ -70,6 +70,8 @@ export function QuizShell({ privacyPolicyUrl, whatsappNumber }: QuizShellProps) 
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [leadDraft, setLeadDraft] = useState<LeadFormData>(EMPTY_LEAD_DRAFT);
   const [submissionId, setSubmissionId] = useState("");
+  const [landingUrl, setLandingUrl] = useState("");
+  const [referrer, setReferrer] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,10 +84,14 @@ export function QuizShell({ privacyPolicyUrl, whatsappNumber }: QuizShellProps) 
       setAnswers(saved.answers);
       setLeadDraft(saved.leadDraft ?? EMPTY_LEAD_DRAFT);
       setSubmissionId(saved.submissionId);
+      setLandingUrl(saved.landingUrl || window.location.href);
+      setReferrer(saved.referrer ?? document.referrer);
       return;
     }
 
     setSubmissionId(createSubmissionId());
+    setLandingUrl(window.location.href);
+    setReferrer(document.referrer);
   }, []);
 
   useEffect(() => {
@@ -95,9 +101,9 @@ export function QuizShell({ privacyPolicyUrl, whatsappNumber }: QuizShellProps) 
 
     window.sessionStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ stepIndex, answers, leadDraft, submissionId })
+      JSON.stringify({ stepIndex, answers, leadDraft, submissionId, landingUrl, referrer })
     );
-  }, [answers, leadDraft, stepIndex, submissionId]);
+  }, [answers, landingUrl, leadDraft, referrer, stepIndex, submissionId]);
 
   const progress = useMemo(() => {
     const answeredCount = Object.keys(answers).length;
@@ -145,8 +151,8 @@ export function QuizShell({ privacyPolicyUrl, whatsappNumber }: QuizShellProps) 
       answers: answersToPayload(answers),
       consentAccepted: formData.consentAccepted,
       privacyPolicyUrl,
-      landingUrl: typeof window === "undefined" ? "" : window.location.href,
-      referrer: typeof document === "undefined" ? "" : document.referrer,
+      landingUrl,
+      referrer,
       honeypot: formData.honeypot
     });
 
@@ -294,6 +300,8 @@ type SavedQuizState = {
   answers: Record<string, string>;
   leadDraft?: LeadFormData;
   submissionId: string;
+  landingUrl?: string;
+  referrer?: string;
 };
 
 function readSavedState(): SavedQuizState | null {
@@ -339,7 +347,9 @@ function sanitizeSavedState(value: unknown): SavedQuizState | null {
     stepIndex,
     answers,
     leadDraft: sanitizeLeadDraft(record.leadDraft),
-    submissionId: record.submissionId
+    submissionId: record.submissionId,
+    landingUrl: typeof record.landingUrl === "string" ? record.landingUrl : undefined,
+    referrer: typeof record.referrer === "string" ? record.referrer : undefined
   };
 }
 
