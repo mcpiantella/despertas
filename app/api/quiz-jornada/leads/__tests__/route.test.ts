@@ -168,6 +168,22 @@ describe("POST /api/quiz-jornada/leads", () => {
     expect(supabase.update).toHaveBeenCalledWith({ crm_webhook_status: "success" });
   });
 
+  it("calls the CRM webhook with an abort signal so it cannot hang the response", async () => {
+    vi.stubEnv("CRM_WEBHOOK_URL", "https://crm.example/webhook");
+    vi.mocked(fetch).mockResolvedValue(new Response(null, { status: 204 }));
+    const supabase = createSupabaseMock({
+      insertResult: { data: { id: "lead-1" }, error: null }
+    });
+    createSupabaseServerClientMock.mockReturnValue(supabase);
+
+    await POST(requestWith(validPayload));
+
+    expect(fetch).toHaveBeenCalledWith(
+      "https://crm.example/webhook",
+      expect.objectContaining({ signal: expect.any(AbortSignal) })
+    );
+  });
+
   it("returns success and stores webhook failure when CRM webhook fails after insert", async () => {
     vi.stubEnv("CRM_WEBHOOK_URL", "https://crm.example/webhook");
     vi.mocked(fetch).mockResolvedValue(new Response(null, { status: 500 }));

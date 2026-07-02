@@ -2,6 +2,8 @@ import { scoreJourneyQuiz } from "@/lib/jornada-do-despertar/scoring";
 import { validateJourneyLeadPayload } from "@/lib/jornada-do-despertar/validation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+const CRM_WEBHOOK_TIMEOUT_MS = 5000;
+
 type SupabaseError = {
   code?: string;
   message: string;
@@ -152,7 +154,8 @@ async function notifyCrmWebhook(
     const response = await fetch(webhookUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ leadId, ...row })
+      body: JSON.stringify({ leadId, ...row }),
+      signal: AbortSignal.timeout(CRM_WEBHOOK_TIMEOUT_MS)
     });
 
     if (!response.ok) {
