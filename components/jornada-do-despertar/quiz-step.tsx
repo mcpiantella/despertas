@@ -26,7 +26,7 @@ export function QuizStep({
   continueDisabled
 }: QuizStepProps) {
   return (
-    <section className="jd-card" aria-live="polite">
+    <section className={`jd-card${options ? " jd-card--question" : ""}`} aria-live="polite">
       {eyebrow ? <p className="jd-eyebrow">{eyebrow}</p> : null}
       <h1>{title}</h1>
       {body?.map((paragraph) => (

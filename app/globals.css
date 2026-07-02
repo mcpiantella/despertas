@@ -141,9 +141,16 @@ a {
 }
 
 .jd-card h1 {
-  max-width: 13ch;
+  max-width: 100%;
   margin-bottom: 20px;
   font-size: clamp(2rem, 9vw, 4rem);
+}
+
+.jd-card--question h1 {
+  font-family: var(--font-sans);
+  font-size: clamp(1.45rem, 5vw, 2.3rem);
+  font-weight: 800;
+  line-height: 1.2;
 }
 
 .jd-card h2 {
@@ -341,8 +348,11 @@ a {
   }
 
   .jd-card h1 {
-    max-width: 100%;
     font-size: 2.1rem;
+  }
+
+  .jd-card--question h1 {
+    font-size: 1.55rem;
   }
 
   .jd-actions {
