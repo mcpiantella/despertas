@@ -289,24 +289,96 @@ function answersToPayload(answers: Record<string, string>): JourneyAnswer[] {
   }));
 }
 
-function readSavedState():
-  | {
-      stepIndex: number;
-      answers: Record<string, string>;
-      leadDraft?: LeadFormData;
-      submissionId: string;
-    }
-  | null {
+type SavedQuizState = {
+  stepIndex: number;
+  answers: Record<string, string>;
+  leadDraft?: LeadFormData;
+  submissionId: string;
+};
+
+function readSavedState(): SavedQuizState | null {
   if (typeof window === "undefined") {
     return null;
   }
 
   try {
     const saved = window.sessionStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : null;
+    return saved ? sanitizeSavedState(JSON.parse(saved)) : null;
   } catch {
     return null;
   }
+}
+
+function sanitizeSavedState(value: unknown): SavedQuizState | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  if (typeof record.stepIndex !== "number" || !Number.isInteger(record.stepIndex)) {
+    return null;
+  }
+
+  if (typeof record.submissionId !== "string" || record.submissionId.length === 0) {
+    return null;
+  }
+
+  const answers = sanitizeAnswers(record.answers);
+
+  if (!answers) {
+    return null;
+  }
+
+  // A saved step is never restored past the lead form: the loading and result
+  // steps depend on an in-flight request and in-memory result that no longer exist.
+  const leadStepIndex = FLOW_STEPS.findIndex((item) => item.type === "lead");
+  const stepIndex = Math.min(Math.max(record.stepIndex, 0), leadStepIndex);
+
+  return {
+    stepIndex,
+    answers,
+    leadDraft: sanitizeLeadDraft(record.leadDraft),
+    submissionId: record.submissionId
+  };
+}
+
+function sanitizeAnswers(value: unknown): Record<string, string> | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+
+  const entries = Object.entries(value as Record<string, unknown>).filter(
+    (entry): entry is [string, string] => typeof entry[1] === "string"
+  );
+
+  return Object.fromEntries(entries);
+}
+
+function sanitizeLeadDraft(value: unknown): LeadFormData | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return undefined;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  if (
+    typeof record.name !== "string" ||
+    typeof record.whatsapp !== "string" ||
+    typeof record.email !== "string" ||
+    typeof record.consentAccepted !== "boolean" ||
+    typeof record.honeypot !== "string"
+  ) {
+    return undefined;
+  }
+
+  return {
+    name: record.name,
+    whatsapp: record.whatsapp,
+    email: record.email,
+    consentAccepted: record.consentAccepted,
+    honeypot: record.honeypot
+  };
 }
 
 function wait(ms: number) {
