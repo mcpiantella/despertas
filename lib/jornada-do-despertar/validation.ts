@@ -1,5 +1,13 @@
 import { z } from "zod";
+import { QUIZ_QUESTIONS } from "./quiz-data";
 import type { JourneyAnswer } from "./scoring";
+
+const MAX_NAME_LENGTH = 120;
+const MAX_WHATSAPP_LENGTH = 40;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_URL_LENGTH = 2048;
+const MAX_TAG_LENGTH = 255;
+const MAX_ANSWER_ID_LENGTH = 64;
 
 export const CONSENT_VERSION = "jornada-do-despertar-v1" as const;
 
@@ -32,33 +40,43 @@ export type ValidatedJourneyLeadPayload = Omit<JourneyLeadPayload, "whatsapp"> &
 };
 
 const journeyAnswerSchema = z.object({
-  questionId: z.string().min(1),
-  optionId: z.string().min(1)
+  questionId: z.string().min(1).max(MAX_ANSWER_ID_LENGTH, "Dados invalidos"),
+  optionId: z.string().min(1).max(MAX_ANSWER_ID_LENGTH, "Dados invalidos")
 });
+
+const boundedTextSchema = z.string().max(MAX_TAG_LENGTH, "Dados invalidos");
+const boundedUrlSchema = z.string().max(MAX_URL_LENGTH, "Dados invalidos");
 
 const journeyLeadPayloadSchema = z.object({
   submissionId: z.string().uuid(),
-  name: z.string().trim().min(2, "Nome obrigatorio"),
-  whatsapp: z.string().min(1, "WhatsApp invalido"),
-  email: z.string().email("E-mail invalido"),
-  answers: z.array(journeyAnswerSchema),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Nome obrigatorio")
+    .max(MAX_NAME_LENGTH, "Nome invalido"),
+  whatsapp: z
+    .string()
+    .min(1, "WhatsApp invalido")
+    .max(MAX_WHATSAPP_LENGTH, "WhatsApp invalido"),
+  email: z.string().email("E-mail invalido").max(MAX_EMAIL_LENGTH, "E-mail invalido"),
+  answers: z.array(journeyAnswerSchema).max(QUIZ_QUESTIONS.length, "Dados invalidos"),
   consentAccepted: z.literal(true, {
     errorMap: () => ({ message: "Consentimento obrigatorio" })
   }),
   consentVersion: z.literal(CONSENT_VERSION),
-  privacyPolicyUrl: z.string(),
-  landingUrl: z.string(),
-  referrer: z.string(),
+  privacyPolicyUrl: boundedUrlSchema,
+  landingUrl: boundedUrlSchema,
+  referrer: boundedUrlSchema,
   utm: z.object({
-    source: z.string(),
-    medium: z.string(),
-    campaign: z.string(),
-    term: z.string(),
-    content: z.string()
+    source: boundedTextSchema,
+    medium: boundedTextSchema,
+    campaign: boundedTextSchema,
+    term: boundedTextSchema,
+    content: boundedTextSchema
   }),
-  origin: z.string(),
-  campaign: z.string(),
-  honeypot: z.string()
+  origin: boundedTextSchema,
+  campaign: boundedTextSchema,
+  honeypot: boundedTextSchema
 });
 
 export function normalizeBrazilianWhatsApp(rawValue: string): string {

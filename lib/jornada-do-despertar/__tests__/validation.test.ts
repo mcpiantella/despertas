@@ -79,4 +79,53 @@ describe("validateJourneyLeadPayload", () => {
       validateJourneyLeadPayload({ ...validPayload, honeypot: "bot value" })
     ).toThrow("Solicitacao invalida");
   });
+
+  it("rejects oversized names", () => {
+    expect(() =>
+      validateJourneyLeadPayload({ ...validPayload, name: "a".repeat(121) })
+    ).toThrow("Nome invalido");
+  });
+
+  it("rejects oversized emails", () => {
+    const email = `${"a".repeat(250)}@example.com`;
+
+    expect(() =>
+      validateJourneyLeadPayload({ ...validPayload, email })
+    ).toThrow("E-mail invalido");
+  });
+
+  it("rejects oversized whatsapp values", () => {
+    expect(() =>
+      validateJourneyLeadPayload({ ...validPayload, whatsapp: "9".repeat(41) })
+    ).toThrow("WhatsApp invalido");
+  });
+
+  it("rejects oversized landing urls", () => {
+    expect(() =>
+      validateJourneyLeadPayload({
+        ...validPayload,
+        landingUrl: `https://example.com/?q=${"a".repeat(2050)}`
+      })
+    ).toThrow("Dados invalidos");
+  });
+
+  it("rejects oversized utm values", () => {
+    expect(() =>
+      validateJourneyLeadPayload({
+        ...validPayload,
+        utm: { ...validPayload.utm, source: "a".repeat(256) }
+      })
+    ).toThrow("Dados invalidos");
+  });
+
+  it("rejects answer lists with more entries than questions", () => {
+    const answers = Array.from({ length: 100 }, (_, index) => ({
+      questionId: `q${index}`,
+      optionId: "a"
+    }));
+
+    expect(() =>
+      validateJourneyLeadPayload({ ...validPayload, answers })
+    ).toThrow("Dados invalidos");
+  });
 });
