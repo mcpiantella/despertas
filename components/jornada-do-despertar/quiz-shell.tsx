@@ -10,6 +10,7 @@ import {
   type ScoreMap
 } from "@/lib/jornada-do-despertar/quiz-data";
 import type { JourneyAnswer } from "@/lib/jornada-do-despertar/scoring";
+import { createSubmissionId } from "@/lib/jornada-do-despertar/submission-id";
 import { trackQuizEvent } from "@/lib/jornada-do-despertar/tracking";
 import { validateJourneyLeadPayload } from "@/lib/jornada-do-despertar/validation";
 import { LeadForm, type LeadFormData } from "./lead-form";
@@ -306,14 +307,6 @@ function readSavedState():
   } catch {
     return null;
   }
-}
-
-function createSubmissionId(): string {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-
-  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function wait(ms: number) {
