@@ -99,10 +99,15 @@ export function QuizShell({ privacyPolicyUrl, whatsappNumber }: QuizShellProps) 
       return;
     }
 
-    window.sessionStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ stepIndex, answers, leadDraft, submissionId, landingUrl, referrer })
-    );
+    try {
+      window.sessionStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ stepIndex, answers, leadDraft, submissionId, landingUrl, referrer })
+      );
+    } catch {
+      // Storage may be full or blocked (e.g. private mode); losing the
+      // saved progress must never break the quiz itself.
+    }
   }, [answers, landingUrl, leadDraft, referrer, stepIndex, submissionId]);
 
   const progress = useMemo(() => {
@@ -358,8 +363,10 @@ function sanitizeAnswers(value: unknown): Record<string, string> | null {
     return null;
   }
 
+  const knownQuestionIds = new Set(QUIZ_QUESTIONS.map((question) => question.id));
   const entries = Object.entries(value as Record<string, unknown>).filter(
-    (entry): entry is [string, string] => typeof entry[1] === "string"
+    (entry): entry is [string, string] =>
+      knownQuestionIds.has(entry[0]) && typeof entry[1] === "string"
   );
 
   return Object.fromEntries(entries);

@@ -90,6 +90,32 @@ describe("QuizShell", () => {
     expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
   });
 
+  it("drops answer keys that do not match quiz questions when restoring", () => {
+    seedSavedState({
+      stepIndex: 2,
+      answers: { q1: "a", injected: "x".repeat(5000) },
+      submissionId: SAVED_SUBMISSION_ID
+    });
+
+    renderShell();
+
+    const saved = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY) ?? "{}");
+
+    expect(saved.answers).toEqual({ q1: "a" });
+  });
+
+  it("keeps rendering when session storage writes fail", () => {
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("QuotaExceededError");
+    });
+
+    renderShell();
+
+    expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
+
+    vi.restoreAllMocks();
+  });
+
   it("captures the landing url at quiz start and persists it with the progress", () => {
     renderShell();
 
