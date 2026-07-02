@@ -28,9 +28,7 @@ type ExistingLead = {
 };
 
 export async function POST(request: Request): Promise<Response> {
-  const clientIp = resolveClientIp(request);
-
-  if (clientIp && !rateLimiter.check(clientIp)) {
+  if (!rateLimiter.check(resolveClientIp(request))) {
     return json(
       { ok: false, error: "Muitas tentativas. Aguarde um instante e tente novamente." },
       429
@@ -194,9 +192,20 @@ async function notifyCrmWebhook(
 }
 
 function resolveClientIp(request: Request): string {
-  const forwardedFor = request.headers.get("x-forwarded-for");
+  // Prefer proxy-set headers; in x-forwarded-for only the LAST hop is appended
+  // by the trusted proxy, earlier hops are client-controlled and spoofable.
+  const proxyIp =
+    request.headers.get("x-vercel-forwarded-for") ?? request.headers.get("x-real-ip");
 
-  return forwardedFor?.split(",")[0]?.trim() ?? "";
+  if (proxyIp) {
+    return proxyIp.trim();
+  }
+
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const lastHop = forwardedFor?.split(",").pop()?.trim();
+
+  // Requests with no resolvable ip share one bucket instead of bypassing the limit.
+  return lastHop || "unknown";
 }
 
 function isDuplicateSubmission(error: SupabaseError): boolean {

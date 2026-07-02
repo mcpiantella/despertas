@@ -222,13 +222,64 @@ describe("POST /api/quiz-jornada/leads", () => {
     expect(responses[5].status).toBe(429);
     await expect(responses[5].json()).resolves.toMatchObject({ ok: false });
   });
+
+  it("rate limits requests that lack any client ip header", async () => {
+    const supabase = createSupabaseMock({
+      insertResult: { data: { id: "lead-1" }, error: null }
+    });
+    createSupabaseServerClientMock.mockReturnValue(supabase);
+
+    const responses = [];
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      responses.push(await POST(requestWithoutIp(validPayload)));
+    }
+
+    expect(responses[5].status).toBe(429);
+  });
+
+  it("ignores spoofed client-controlled hops in x-forwarded-for", async () => {
+    const supabase = createSupabaseMock({
+      insertResult: { data: { id: "lead-1" }, error: null }
+    });
+    createSupabaseServerClientMock.mockReturnValue(supabase);
+
+    const responses = [];
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      responses.push(
+        await POST(
+          requestWith(validPayload, {
+            "x-forwarded-for": `10.0.0.${attempt}, 203.0.113.50`
+          })
+        )
+      );
+    }
+
+    expect(responses[5].status).toBe(429);
+  });
 });
 
+let ipSequence = 0;
+
 function requestWith(payload: unknown, headers: Record<string, string> = {}): Request {
+  // Each call simulates a distinct client unless the test overrides the header.
+  ipSequence += 1;
+
   return new Request("http://localhost/api/quiz-jornada/leads", {
     method: "POST",
     body: JSON.stringify(payload),
-    headers: { "content-type": "application/json", ...headers }
+    headers: {
+      "content-type": "application/json",
+      "x-forwarded-for": `198.51.${Math.floor(ipSequence / 200)}.${ipSequence % 200}`,
+      ...headers
+    }
+  });
+}
+
+function requestWithoutIp(payload: unknown): Request {
+  return new Request("http://localhost/api/quiz-jornada/leads", {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: { "content-type": "application/json" }
   });
 }
 

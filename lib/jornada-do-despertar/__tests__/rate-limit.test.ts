@@ -37,4 +37,18 @@ describe("createRateLimiter", () => {
     expect(limiter.check("ip-2", 1_000)).toBe(true);
     expect(limiter.check("ip-1", 2_000)).toBe(false);
   });
+
+  it("sweeps stale keys so the map cannot grow without bound", () => {
+    const limiter = createRateLimiter({ limit: 1, windowMs: 60_000, maxKeys: 2 });
+
+    limiter.check("ip-1", 1_000);
+    limiter.check("ip-2", 2_000);
+
+    expect(limiter.size()).toBe(2);
+
+    limiter.check("ip-3", 70_000);
+
+    expect(limiter.size()).toBe(1);
+    expect(limiter.check("ip-3", 71_000)).toBe(false);
+  });
 });
