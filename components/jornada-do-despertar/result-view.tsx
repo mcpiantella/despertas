@@ -1,4 +1,8 @@
-import type { JourneyArea, ScoreMap } from "@/lib/jornada-do-despertar/quiz-data";
+import {
+  JOURNEY_RESULT_DISPLAY_LABELS,
+  type JourneyArea,
+  type ScoreMap
+} from "@/lib/jornada-do-despertar/quiz-data";
 import { JOURNEY_RESULTS } from "@/lib/jornada-do-despertar/results";
 import { buildWhatsAppUrl } from "@/lib/jornada-do-despertar/whatsapp";
 
@@ -23,7 +27,7 @@ export function ResultView({
   const primaryUrl = buildWhatsAppUrl({
     phoneNumber: whatsappNumber,
     variant: "identification",
-    resultLabel: result.label
+    resultLabel: JOURNEY_RESULT_DISPLAY_LABELS[result.key]
   });
   const secondaryUrl = buildWhatsAppUrl({ phoneNumber: whatsappNumber, variant: "doubt" });
 

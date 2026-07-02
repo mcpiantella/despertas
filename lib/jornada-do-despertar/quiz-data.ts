@@ -23,6 +23,16 @@ export const JOURNEY_RESULT_LABELS: Record<JourneyArea, string> = {
   IP: "Identidade e Proposito"
 };
 
+// Labels persisted in the database stay in ASCII (JOURNEY_RESULT_LABELS);
+// anything shown to the user must use the accented display labels below.
+export const JOURNEY_RESULT_DISPLAY_LABELS: Record<JourneyArea, string> = {
+  CD: "Clareza e Direção",
+  VP: "Voz e Posicionamento",
+  FL: "Fardos e Limites",
+  SR: "Segurança e Recomeços",
+  IP: "Identidade e Propósito"
+};
+
 export const JOURNEY_AREAS: JourneyArea[] = ["CD", "VP", "FL", "SR", "IP"];
 
 export const EMPTY_SCORES: ScoreMap = {
