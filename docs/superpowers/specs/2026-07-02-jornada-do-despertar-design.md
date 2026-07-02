@@ -300,6 +300,8 @@ Tabela proposta: `quiz_jornada_leads`.
 Campos:
 
 ```sql
+create extension if not exists pgcrypto;
+
 id uuid primary key default gen_random_uuid(),
 created_at timestamptz not null default now(),
 submission_id uuid not null unique,
@@ -376,6 +378,12 @@ NEXT_PUBLIC_PRIVACY_POLICY_URL
 ```
 
 `CRM_WEBHOOK_URL` e opcional na primeira versao. Quando configurada, a API deve chamar o webhook depois de salvar o lead e registrar sucesso/falha sem apagar o lead ja salvo.
+
+Depois do webhook, a API deve atualizar o lead salvo:
+
+- `crm_webhook_status = 'success'` quando o webhook funcionar.
+- `crm_webhook_status = 'failed'` e `crm_webhook_error` quando falhar.
+- Falha do webhook nao bloqueia a exibicao do resultado quando o lead ja foi salvo.
 
 ## Idempotencia
 
@@ -478,6 +486,7 @@ Testes automatizados:
 - Idempotencia por `submission_id`.
 - Honeypot rejeitado quando preenchido.
 - API rejeita payload incompleto.
+- O scaffold inicial deve permitir `npm test` antes da criacao dos testes, usando `vitest run --passWithNoTests` ou teste minimo equivalente.
 
 Validacao manual:
 
