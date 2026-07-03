@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { QuizShell } from "../quiz-shell";
 
@@ -40,6 +41,19 @@ describe("QuizShell", () => {
 
     expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Começar minha Jornada" })).toBeInTheDocument();
+  });
+
+  it("shows Juliana's portrait on the introduction step", async () => {
+    const user = userEvent.setup();
+    renderShell();
+
+    await user.click(screen.getByRole("button", { name: "Começar minha Jornada" }));
+    await user.click(screen.getByRole("button", { name: "Estou pronta para começar" }));
+
+    expect(
+      screen.getByRole("heading", { name: "Antes, deixa eu me apresentar." })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Juliana Piantella" })).toBeInTheDocument();
   });
 
   it("restores to the lead step when saved progress points at the loading step", () => {

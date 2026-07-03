@@ -122,6 +122,18 @@ a {
   padding-bottom: clamp(28px, 7vw, 56px);
 }
 
+.jd-portrait {
+  display: block;
+  width: 9.5rem;
+  height: 12rem;
+  margin: 0 auto 1.25rem;
+  border: 3px solid var(--color-surface-strong);
+  border-radius: 50%;
+  box-shadow: 0 14px 34px rgba(75, 24, 40, 0.18);
+  object-fit: cover;
+  object-position: top center;
+}
+
 .jd-eyebrow {
   margin: 0 0 12px;
   color: var(--color-terracotta);

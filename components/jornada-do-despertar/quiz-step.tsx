@@ -1,9 +1,10 @@
-import type { QuizOption } from "@/lib/jornada-do-despertar/quiz-data";
+import type { QuizOption, StepImage } from "@/lib/jornada-do-despertar/quiz-data";
 
 type QuizStepProps = {
   eyebrow?: string;
   title: string;
   body?: string[];
+  image?: StepImage;
   options?: QuizOption[];
   selectedOptionId?: string;
   buttonLabel?: string;
@@ -17,6 +18,7 @@ export function QuizStep({
   eyebrow,
   title,
   body,
+  image,
   options,
   selectedOptionId,
   buttonLabel = "Continuar",
@@ -28,6 +30,15 @@ export function QuizStep({
   return (
     <section className={`jd-card${options ? " jd-card--question" : ""}`} aria-live="polite">
       {eyebrow ? <p className="jd-eyebrow">{eyebrow}</p> : null}
+      {image ? (
+        <img
+          alt={image.alt}
+          className="jd-portrait"
+          height={320}
+          src={image.src}
+          width={240}
+        />
+      ) : null}
       <h1>{title}</h1>
       {body?.map((paragraph) => (
         <p key={paragraph}>{paragraph}</p>

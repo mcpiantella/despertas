@@ -209,6 +209,7 @@ export function QuizShell({ privacyPolicyUrl, whatsappNumber }: QuizShellProps) 
         <QuizStep
           title={intro.title}
           body={intro.body}
+          image={intro.image}
           buttonLabel={intro.buttonLabel}
           onContinue={goNext}
           onBack={stepIndex > 0 ? goBack : undefined}

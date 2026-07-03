@@ -15,6 +15,19 @@ export type QuizQuestion = {
   options: QuizOption[];
 };
 
+export type StepImage = {
+  src: string;
+  alt: string;
+};
+
+export type IntroStep = {
+  id: string;
+  title: string;
+  body: string[];
+  buttonLabel: string;
+  image?: StepImage;
+};
+
 export const JOURNEY_RESULT_LABELS: Record<JourneyArea, string> = {
   CD: "Clareza e Direcao",
   VP: "Voz e Posicionamento",
@@ -43,7 +56,7 @@ export const EMPTY_SCORES: ScoreMap = {
   IP: 0
 };
 
-export const INTRO_STEPS = [
+export const INTRO_STEPS: IntroStep[] = [
   {
     id: "abertura",
     title: "Jornada do Despertar",
@@ -70,6 +83,10 @@ export const INTRO_STEPS = [
   {
     id: "apresentacao",
     title: "Antes, deixa eu me apresentar.",
+    image: {
+      src: "/juliana-apresentacao.jpg",
+      alt: "Juliana Piantella"
+    },
     body: [
       "Eu sou Juliana Piantella, Psicanalista Cristã, Terapeuta de Alta Performance e criadora do Método Despertar.",
       "Uno princípios bíblicos e ferramentas de autoconhecimento para ajudar mulheres a identificarem travas mentais, renovarem a mente e caminharem com mais clareza, constância e propósito.",
