@@ -82,7 +82,7 @@ export const INTRO_STEPS: IntroStep[] = [
   },
   {
     id: "apresentacao",
-    title: "Antes, deixa eu me apresentar.",
+    title: "Primeiro, deixa eu me apresentar.",
     image: {
       src: "/juliana-apresentacao.jpg",
       alt: "Juliana Piantella"

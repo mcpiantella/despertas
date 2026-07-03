@@ -51,7 +51,7 @@ describe("QuizShell", () => {
     await user.click(screen.getByRole("button", { name: "Estou pronta para começar" }));
 
     expect(
-      screen.getByRole("heading", { name: "Antes, deixa eu me apresentar." })
+      screen.getByRole("heading", { name: "Primeiro, deixa eu me apresentar." })
     ).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Juliana Piantella" })).toBeInTheDocument();
   });

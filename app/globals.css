@@ -155,7 +155,7 @@ a {
 .jd-card h1 {
   max-width: 100%;
   margin-bottom: 20px;
-  font-size: clamp(2rem, 9vw, 4rem);
+  font-size: clamp(1.7rem, 7.65vw, 3.4rem);
 }
 
 .jd-card--question h1 {
@@ -360,7 +360,7 @@ a {
   }
 
   .jd-card h1 {
-    font-size: 2.1rem;
+    font-size: 1.79rem;
   }
 
   .jd-card--question h1 {
