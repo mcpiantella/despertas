@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { QuizShell } from "@/components/jornada-do-despertar/quiz-shell";
 
+// Read NEXT_PUBLIC_* vars at request time instead of baking them into the
+// build, so self-hosted deploys (EasyPanel/Docker) only need runtime env vars.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Jornada do Despertar | Juliana Piantella",
   description:
