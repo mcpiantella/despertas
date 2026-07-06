@@ -14,12 +14,23 @@ type LeadFormProps = {
   data: LeadFormData;
   isSubmitting: boolean;
   error?: string;
+  privacyPolicyUrl?: string;
   onChange: (data: LeadFormData) => void;
   onSubmit: (data: LeadFormData) => void;
   onBack: () => void;
 };
 
-export function LeadForm({ data, isSubmitting, error, onChange, onSubmit, onBack }: LeadFormProps) {
+export function LeadForm({
+  data,
+  isSubmitting,
+  error,
+  privacyPolicyUrl,
+  onChange,
+  onSubmit,
+  onBack
+}: LeadFormProps) {
+  const policyHref = privacyPolicyUrl || "/politica-de-privacidade";
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onSubmit(data);
@@ -99,7 +110,11 @@ export function LeadForm({ data, isSubmitting, error, onChange, onSubmit, onBack
         <p className="jd-small">
           Esta leitura não é diagnóstico e não substitui a Sessão de Identificação de
           Travas Mentais. Ela é apenas um primeiro espelho para te ajudar a perceber áreas
-          que talvez mereçam mais atenção.
+          que talvez mereçam mais atenção. Saiba como seus dados são tratados na nossa{" "}
+          <a href={policyHref} rel="noopener noreferrer" target="_blank">
+            Política de Privacidade
+          </a>
+          .
         </p>
 
         {error ? (

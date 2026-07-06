@@ -253,6 +253,7 @@ export function QuizShell({ privacyPolicyUrl, whatsappNumber }: QuizShellProps) 
           data={leadDraft}
           error={submitError}
           isSubmitting={isSubmitting}
+          privacyPolicyUrl={privacyPolicyUrl}
           onChange={setLeadDraft}
           onBack={goBack}
           onSubmit={submitLead}
