@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import RootPage from "../page";
+import LegacyJornadaDoDespertarPage from "../page";
 
-describe("RootPage", () => {
-  it("redirects the root route to the quiz", () => {
+describe("LegacyJornadaDoDespertarPage", () => {
+  it("redirects the old route to the new jornada-despertas route", () => {
     let caught: unknown;
 
     try {
-      RootPage();
+      LegacyJornadaDoDespertarPage();
     } catch (error) {
       caught = error;
     }
