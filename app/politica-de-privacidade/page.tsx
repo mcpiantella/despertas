@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade | Juliana Piantella",
+  title: "Política de Privacidade",
   description:
-    "Como a Juliana Piantella coleta, usa e protege os dados enviados na Jornada do Despertar.",
+    "Como a Juliana Piantella coleta, usa e protege os dados enviados na Jornada Despertas.",
   robots: { index: true, follow: true }
 };
 
@@ -20,13 +20,13 @@ export default function PoliticaDePrivacidadePage() {
 
           <p>
             Esta política explica como <strong>Juliana Piantella</strong> (&quot;nós&quot;),
-            responsável pela Jornada do Despertar e pelo Método Despertas, coleta, usa e
+            responsável pela Jornada Despertas e pelo Método Despertas, coleta, usa e
             protege as informações pessoais enviadas por você neste site, em conformidade
             com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).
           </p>
 
           <h2>Quais dados coletamos</h2>
-          <p>Ao concluir a Jornada do Despertar, coletamos:</p>
+          <p>Ao concluir a Jornada Despertas, coletamos:</p>
           <ul>
             <li>Nome, número de WhatsApp e e-mail informados por você;</li>
             <li>Suas respostas às perguntas do quiz e a leitura inicial gerada;</li>
@@ -72,9 +72,9 @@ export default function PoliticaDePrivacidadePage() {
             Juliana pelo WhatsApp {CONTACT_WHATSAPP}.
           </p>
 
-          <h2>Sobre a Jornada do Despertar</h2>
+          <h2>Sobre a Jornada Despertas</h2>
           <p>
-            A Jornada do Despertar é uma experiência de autoconhecimento. Ela não é
+            A Jornada Despertas é uma experiência de autoconhecimento. Ela não é
             avaliação psicológica, diagnóstico ou tratamento, e as suas respostas são
             usadas apenas para gerar a leitura inicial e para o contato descrito nesta
             política.

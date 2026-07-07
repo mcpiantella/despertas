@@ -19,7 +19,7 @@ describe("QuizStep", () => {
   });
 
   it("renders no image when the step has none", () => {
-    render(<QuizStep title="Jornada do Despertar" onContinue={vi.fn()} />);
+    render(<QuizStep title="Jornada Despertas" onContinue={vi.fn()} />);
 
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
