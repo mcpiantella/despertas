@@ -54,6 +54,7 @@ describe("QuizShell", () => {
       screen.getByRole("heading", { name: "Primeiro, deixa eu me apresentar." })
     ).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Juliana Piantella" })).toBeInTheDocument();
+    expect(screen.getByText(/Método Despertas/)).toBeInTheDocument();
   });
 
   it("restores to the lead step when saved progress points at the loading step", () => {

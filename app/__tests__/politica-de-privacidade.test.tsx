@@ -11,6 +11,7 @@ describe("PoliticaDePrivacidadePage", () => {
       screen.getByRole("heading", { level: 1, name: "Política de Privacidade" })
     ).toBeInTheDocument();
     expect(screen.getByText(/Juliana Piantella/)).toBeInTheDocument();
+    expect(screen.getByText(/Método Despertas/)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Quais dados coletamos/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Seus direitos/i })).toBeInTheDocument();
   });
