@@ -6,11 +6,11 @@ import { QuizShell } from "@/components/jornada-do-despertar/quiz-shell";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Jornada do Despertar | Juliana Piantella",
+  title: "Jornada Despertas",
   description:
     "Um caminho breve para perceber padrões que talvez estejam influenciando sua clareza, constância e direção.",
   openGraph: {
-    title: "Jornada do Despertar | Juliana Piantella",
+    title: "Jornada Despertas | Juliana Piantella",
     description:
       "Um caminho breve para perceber padrões que talvez estejam influenciando sua clareza, constância e direção.",
     type: "website"

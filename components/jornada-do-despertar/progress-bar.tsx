@@ -8,7 +8,7 @@ export function ProgressBar({ value }: ProgressBarProps) {
   return (
     <div className="jd-progress" aria-label={`Progresso ${boundedValue}%`}>
       <div className="jd-progress__meta">
-        <span>Jornada do Despertar</span>
+        <span>Jornada Despertas</span>
         <span>{boundedValue}%</span>
       </div>
       <div className="jd-progress__track">

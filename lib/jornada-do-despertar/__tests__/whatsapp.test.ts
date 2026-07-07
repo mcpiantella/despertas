@@ -12,7 +12,7 @@ describe("buildWhatsAppUrl", () => {
     const parsed = new URL(url);
     expect(`${parsed.origin}${parsed.pathname}`).toBe("https://wa.me/5511999999999");
     expect(parsed.searchParams.get("text")).toBe(
-      'Oi, Juliana! Fiz a Jornada do Despertar e meu resultado foi "Clareza e Direcao". Quero saber mais sobre a Sessão de Identificação de Travas Mentais.'
+      'Oi, Juliana! Fiz a Jornada Despertas e meu resultado foi "Clareza e Direcao". Quero saber mais sobre a Sessão de Identificação de Travas Mentais.'
     );
   });
 
@@ -25,7 +25,7 @@ describe("buildWhatsAppUrl", () => {
     const parsed = new URL(url);
     expect(`${parsed.origin}${parsed.pathname}`).toBe("https://wa.me/5511999999999");
     expect(parsed.searchParams.get("text")).toBe(
-      "Oi, Juliana! Fiz a Jornada do Despertar e fiquei com uma dúvida antes de agendar a Sessão de Identificação."
+      "Oi, Juliana! Fiz a Jornada Despertas e fiquei com uma dúvida antes de agendar a Sessão de Identificação."
     );
   });
 });

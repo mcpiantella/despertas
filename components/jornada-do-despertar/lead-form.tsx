@@ -102,7 +102,7 @@ export function LeadForm({
           />
           <span>
             Ao continuar, você autoriza o envio das suas informações para que a Juliana
-            Piantella possa retornar sobre a Jornada do Despertar e a Sessão de
+            Piantella possa retornar sobre a Jornada Despertas e a Sessão de
             Identificação de Travas Mentais.
           </span>
         </label>

@@ -54,7 +54,7 @@ export function ResultView({
         </p>
         <p>
           A <strong>Sessão de Identificação de Travas Mentais</strong> é o próximo passo
-          da Jornada do Despertar.
+          da Jornada Despertas.
         </p>
         <p>
           <strong>O Quiz acendeu a luz.</strong>

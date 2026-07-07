@@ -39,7 +39,7 @@ describe("QuizShell", () => {
   it("renders the opening step", () => {
     renderShell();
 
-    expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Jornada Despertas" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Começar minha Jornada" })).toBeInTheDocument();
   });
 
@@ -94,7 +94,7 @@ describe("QuizShell", () => {
 
     renderShell();
 
-    expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Jornada Despertas" })).toBeInTheDocument();
   });
 
   it("starts fresh when saved progress is not valid JSON", () => {
@@ -102,7 +102,7 @@ describe("QuizShell", () => {
 
     renderShell();
 
-    expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Jornada Despertas" })).toBeInTheDocument();
   });
 
   it("drops answer keys that do not match quiz questions when restoring", () => {
@@ -126,7 +126,7 @@ describe("QuizShell", () => {
 
     renderShell();
 
-    expect(screen.getByRole("heading", { name: "Jornada do Despertar" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Jornada Despertas" })).toBeInTheDocument();
 
     vi.restoreAllMocks();
   });

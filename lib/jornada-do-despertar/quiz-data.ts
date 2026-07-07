@@ -59,7 +59,7 @@ export const EMPTY_SCORES: ScoreMap = {
 export const INTRO_STEPS: IntroStep[] = [
   {
     id: "abertura",
-    title: "Jornada do Despertar",
+    title: "Jornada Despertas",
     body: [
       "Talvez você não esteja parada por falta de força.",
       "Talvez existam padrões funcionando no automático, influenciando suas decisões, sua constância e a forma como você se posiciona.",
