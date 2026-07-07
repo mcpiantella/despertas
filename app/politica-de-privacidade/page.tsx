@@ -20,7 +20,7 @@ export default function PoliticaDePrivacidadePage() {
 
           <p>
             Esta política explica como <strong>Juliana Piantella</strong> (&quot;nós&quot;),
-            responsável pela Jornada do Despertar e pelo Método Despertar, coleta, usa e
+            responsável pela Jornada do Despertar e pelo Método Despertas, coleta, usa e
             protege as informações pessoais enviadas por você neste site, em conformidade
             com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).
           </p>

@@ -88,7 +88,7 @@ export const INTRO_STEPS: IntroStep[] = [
       alt: "Juliana Piantella"
     },
     body: [
-      "Eu sou Juliana Piantella, Psicanalista Cristã, Terapeuta de Alta Performance e criadora do Método Despertar.",
+      "Eu sou Juliana Piantella, Psicanalista Cristã, Terapeuta de Alta Performance e criadora do Método Despertas.",
       "Uno princípios bíblicos e ferramentas de autoconhecimento para ajudar mulheres a identificarem travas mentais, renovarem a mente e caminharem com mais clareza, constância e propósito.",
       "Aqui não existe peso religioso, cobrança ou julgamento.",
       "Existe verdade, discernimento e direção."
