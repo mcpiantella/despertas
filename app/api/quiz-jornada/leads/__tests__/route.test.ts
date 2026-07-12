@@ -168,6 +168,35 @@ describe("POST /api/quiz-jornada/leads", () => {
     expect(supabase.update).toHaveBeenCalledWith({ crm_webhook_status: "success" });
   });
 
+  it("sends the CRM webhook authenticated and mapped to the intake format", async () => {
+    vi.stubEnv("CRM_WEBHOOK_URL", "http://crm/api/v1/contacts");
+    vi.stubEnv("CRM_WEBHOOK_SECRET", "zsender_live_test");
+    vi.mocked(fetch).mockResolvedValue(new Response(null, { status: 200 }));
+    const supabase = createSupabaseMock({
+      insertResult: { data: { id: "lead-1" }, error: null }
+    });
+    createSupabaseServerClientMock.mockReturnValue(supabase);
+
+    await POST(requestWith(validPayload));
+
+    const call = vi.mocked(fetch).mock.calls.at(-1);
+    expect(call?.[0]).toBe("http://crm/api/v1/contacts");
+    const init = call?.[1] as RequestInit;
+    expect((init.headers as Record<string, string>).Authorization).toBe(
+      "Bearer zsender_live_test"
+    );
+    const sent = JSON.parse(init.body as string);
+    expect(sent).toMatchObject({
+      submissionId: validPayload.submissionId,
+      name: "Maria Silva",
+      whatsapp: "5511912345678",
+      email: "maria@example.com",
+      resultKey: "CD",
+      resultLabel: "Clareza e Direção"
+    });
+    expect(sent.leadId).toBeUndefined();
+  });
+
   it("calls the CRM webhook with an abort signal so it cannot hang the response", async () => {
     vi.stubEnv("CRM_WEBHOOK_URL", "https://crm.example/webhook");
     vi.mocked(fetch).mockResolvedValue(new Response(null, { status: 204 }));

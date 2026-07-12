@@ -1,3 +1,7 @@
+import {
+  JOURNEY_RESULT_DISPLAY_LABELS,
+  type JourneyArea
+} from "@/lib/jornada-do-despertar/quiz-data";
 import { createRateLimiter } from "@/lib/jornada-do-despertar/rate-limit";
 import { scoreJourneyQuiz } from "@/lib/jornada-do-despertar/scoring";
 import { validateJourneyLeadPayload } from "@/lib/jornada-do-despertar/validation";
@@ -164,11 +168,33 @@ async function notifyCrmWebhook(
     return;
   }
 
+  const secret = process.env.CRM_WEBHOOK_SECRET;
+  const crmPayload = {
+    submissionId: row.submission_id,
+    name: row.name,
+    whatsapp: row.whatsapp_normalized,
+    email: row.email,
+    resultKey: row.result_key,
+    resultLabel: JOURNEY_RESULT_DISPLAY_LABELS[row.result_key as JourneyArea],
+    utm: {
+      source: row.utm_source,
+      medium: row.utm_medium,
+      campaign: row.utm_campaign,
+      term: row.utm_term,
+      content: row.utm_content
+    },
+    landingUrl: row.landing_url,
+    referrer: row.referrer
+  };
+
   try {
     const response = await fetch(webhookUrl, {
       method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ leadId, ...row }),
+      headers: {
+        "content-type": "application/json",
+        ...(secret ? { Authorization: `Bearer ${secret}` } : {})
+      },
+      body: JSON.stringify(crmPayload),
       signal: AbortSignal.timeout(CRM_WEBHOOK_TIMEOUT_MS)
     });
 
